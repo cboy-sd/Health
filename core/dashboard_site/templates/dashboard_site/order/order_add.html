@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>الإسبيتاليا - إضافة طلب</title>
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap-rtl.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+
+<body>
+<div class="main-wrapper">
+
+    {% include 'dashboard_site/navbar.html' %}
+
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">إضافة طلب</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">الطلبات</a></li>
+                            <li class="breadcrumb-item active">إضافة طلب</li>
+                        </ul>
+                    </div>
+                    <div class="col-auto text-right float-right ml-auto">
+                        <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> تحميل</a>
+                        <a href="#" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-sm-12">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="{% url 'dashboard_site:order_add_page' %}" method="POST">
+
+                                {% csrf_token %}
+
+                                <div class="row">
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>معلومات نوع المقابله</span></h5>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label>نوع المقابله</label>
+                                            <select
+                                                    id="appointment-type"
+                                                    class="form-control"
+                                                    name="appointment_type"
+                                                    required
+                                            >
+                                                <option value="1" selected>مدفوعه</option>
+                                                <option value="2">مجانيه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>معلومات المريض و الدكتور</span></h5>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label>اسم المريض</label>
+                                            <select
+                                                    id="select-patient"
+                                                    class="form-control"
+                                                    name="patient_id"
+                                                    required
+                                            >
+                                                <option selected disabled>إختيار المريض</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label>اسم الطبيب</label>
+                                            <select
+                                                    id="select-doctor"
+                                                    class="form-control"
+                                                    name="doctor_id"
+                                                    required
+                                            >
+                                                <option selected disabled>إختيار الطبيب</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>معلومات المده الزمنيه</span></h5>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 row">
+
+                                        <div class="col-3 col-sm-3">
+                                            <div class="form-group">
+                                                <label>السنه</label>
+                                                <input
+                                                        id="meet-year"
+                                                        type="number"
+                                                        name="meeting_year"
+                                                        class="form-control"
+                                                        required
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="col-3 col-sm-3">
+                                            <div class="form-group">
+                                                <label>الشهر</label>
+                                                <select
+                                                        id="select-month"
+                                                        class="form-control"
+                                                        name="meeting_month"
+                                                        required
+                                                >
+                                                    <option value="1">يناير</option>
+                                                    <option value="2">فبراير</option>
+                                                    <option value="3">مارس</option>
+                                                    <option value="4">ابريل</option>
+                                                    <option value="5">مايو</option>
+                                                    <option value="6">يونيو</option>
+                                                    <option value="7">يوليو</option>
+                                                    <option value="8">اغسطس</option>
+                                                    <option value="9">سبتمير</option>
+                                                    <option value="10">اوكتوبر</option>
+                                                    <option value="11">نوفمبر</option>
+                                                    <option value="12">ديسمبر</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-3 col-sm-3">
+                                            <div class="form-group">
+                                                <label>يوم المقابله و الساعه</label>
+                                                <select
+                                                        id="select-doctor-time"
+                                                        class="form-control"
+                                                        name="doctor_time"
+                                                        required
+                                                >
+                                                    <option selected disabled>إختيار الفتره المتوفره</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-3 col-sm-3">
+                                            <div class="form-group">
+                                                <label>اليوم</label>
+                                                <select
+                                                        id="select-day"
+                                                        class="form-control"
+                                                        name="meeting_day"
+                                                        required
+                                                >
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>معلومات سعر الطلب</span></h5>
+                                    </div>
+
+                                    <div class="col-12 row">
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group">
+                                                <label>تكلفة الطبيب</label>
+                                                <input
+                                                        id="doctor-cost"
+                                                        type="number"
+                                                        class="form-control"
+                                                        disabled
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group">
+                                                <label>تكلفة اسبتاليا</label>
+                                                <input
+                                                        id="espitalias-cost"
+                                                        type="number"
+                                                        class="form-control"
+                                                        disabled
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group">
+                                                <label>التكلفه الكليه</label>
+                                                <input
+                                                        id="total-cost"
+                                                        type="number"
+                                                        class="form-control"
+                                                        disabled
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">تأكيد الطلب</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <footer>
+            <p>الحقوق محفوظة © 2022 لدي عيادات الإسبيتاليا.</p>
+            <p>تم التنفيذ بواسطة <a href="https://alhasif.com"> <img class="avatar-img rounded-circle"
+                                                                     src="/static/assets/img/alhasif_logo.png"
+                                                                     alt="alhasif" width="50"> شركة الحصيف العالمية
+                المحدودة</a></p>
+        </footer>
+
+    </div>
+
+
+</div>
+<script src="/static/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/static/assets/js/popper.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="/static/assets/plugins/apexchart/chart-data.js"></script>
+<script src="/static/assets/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+        integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
+        integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    //
+    $(document).ready(function () {
+
+        let doctor_id = null;
+        let appointment_cost = 0;
+        let espitalia_cost = 0;
+        let appointment_type = "1";
+        let selectedWeekDay = null;
+
+        let arabicDaysToNumber = {
+            'السبت': 1,
+            'الاحد': 2,
+            'الاثنين': 3,
+            'الثلاثاء': 4,
+            'الاربعاء': 5,
+            'الخميس': 6,
+            'الجمعه': 7,
+        };
+
+        $('#select-patient').select2({
+            ajax: {
+                url: '/api/patient/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    let results = _.map(data.results, (r) => {
+                        return {id: r.pk, text: r.user.full_name}
+                    })
+                    console.log(results)
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor').select2({
+            ajax: {
+                url: '/api/doctor/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: r.pk,
+                            text: r.user.full_name,
+                            data: r
+                        }
+                    })
+                    console.log(results)
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor').on('select2:select', (e) => {
+
+            moment.locale('en');
+
+            var data = e.params.data.data;
+
+            appointment_cost = data.appointment_cost;
+            espitalia_cost = data.espitalia_cost;
+
+            calculateCost();
+
+        });
+
+        $('#select-doctor-time').select2({
+            ajax: {
+                url: function (params) {
+                    let doctor_id = $('#select-doctor').val();
+                    console.log(params);
+                    return `/api/doctor-time/${doctor_id}/list/`;
+                },
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    moment.locale('ar');
+                    let results = _.map(data.results, (r) => {
+                        let start_time = moment(r.start_hour, "hh:mm:ss").format("hh:mm a");
+                        let end_time = moment(r.end_hour, "hh:mm:ss").format("hh:mm a");
+                        return {
+                            id: r.pk,
+                            text: `${r.days} - ${start_time} - ${end_time}`,
+                            data: r
+                        }
+                    })
+                    console.log(results)
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor-time').on('select2:select', (e) => {
+
+
+            var data = e.params.data;
+
+            console.log(data);
+
+            selectedWeekDay = arabicDaysToNumber[data.data.days];
+
+
+        });
+
+        $('#select-month').select2();
+        $('#select-month').val((new Date()).getMonth() + 1).select();
+        $('#select-month').trigger('change.select2');
+
+        $('#meet-year').val((new Date()).getFullYear())
+
+        $('#select-day').select2({
+            ajax: {
+                url: function (params) {
+                    let doctor_time_id = $('#select-doctor-time').val();
+                    console.log(params);
+                    return `/api/reserved-doctor-time/${doctor_time_id}/list/`;
+                },
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                        year: $('#meet-year').val(),
+                        month: $('#select-month').val(),
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+
+                    console.log(data)
+
+                    moment.locale('en');
+
+                    console.log("Selected Week Day: ", selectedWeekDay);
+                    let reservedDates = _.map(data.results, 'reserved_date');
+                    let currentDate = moment();
+
+                    let yearMonth = `${$('#meet-year').val()}-${$('#select-month').val()}`
+                    var startOfMonth = moment(yearMonth).startOf('month');
+                    if (startOfMonth < currentDate) {
+                        startOfMonth = currentDate;
+                    }
+                    console.log(startOfMonth);
+                    var endOfMonth = moment(yearMonth).endOf('month');
+                    console.log(endOfMonth);
+
+                    let allDates = [];
+
+                    currentDate = startOfMonth;
+
+                    //Logic for getting rest of the dates between two dates("FromDate" to "EndDate")
+                    while (currentDate <= endOfMonth) {
+                        let currentWeekDay = currentDate.day() + 1;
+                        console.log(currentWeekDay);
+                        if (
+                            currentWeekDay === selectedWeekDay
+                            &&
+                            !reservedDates.includes(currentDate.format("YYYY-MM-DD"))
+                        ) {
+                            console.log(currentDate.format("YYYY-MM-DD"));
+                            allDates.push({id: currentDate.format("DD"), text: currentDate.format("DD")});
+                        }
+                        currentDate = currentDate.add(1, 'days');
+                    }
+
+                    console.log(allDates);
+
+                    moment.locale('ar');
+
+                    return {
+                        results: allDates
+                    };
+                },
+            }
+        });
+
+        // TODO: Appointment Type Selector Start
+        $('#appointment-type').select2();
+
+        $('#appointment-type').on('select2:select', (e) => {
+            var data = e.params.data;
+            console.log(data);
+            appointment_type = data.id;
+            calculateCost();
+        });
+
+        // TODO: Appointment Selector Type End
+
+        function calculateCost() {
+            if (appointment_type === "1") {
+                $('#doctor-cost').val(appointment_cost);
+                $('#espitalias-cost').val(espitalia_cost);
+                $('#total-cost').val(appointment_cost + espitalia_cost);
+            } else {
+                $('#doctor-cost').val(0);
+                $('#espitalias-cost').val(0);
+                $('#total-cost').val(0);
+            }
+
+        }
+
+    });
+</script>
+
+
+</body>
+
+</html>

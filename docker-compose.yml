@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+      - ./certbot/conf:/etc/nginx/ssl
+      - ./certbot/data:/var/www/certbot
+    depends_on:
+      - backend
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/var/www/certbot --email mohammedHammed.email@gmail.com --agree-tos --no-eff-email -d shopingo.com -d www.shopingo.com
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/logs:/var/log/letsencrypt
+      - ./certbot/data:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  backend:
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - .:/app:rw
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - db
+    command: >
+      sh -c "python manage.py makemigrations &&
+             echo y | python manage.py migrate &&
+             echo yes | python manage.py collectstatic &&
+             gunicorn --access-logfile /app/logs/gunicorn-access.log --error-logfile /app/logs/gunicorn-error.log --workers 3 --bind 0.0.0.0:8000 core.wsgi:application"
+
+    restart: always
+    image: shoppingo_backend
+
+  db:
+    env_file:
+      - ./.env
+    image: mysql:5.7
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: always
+
+volumes:
+  static_volume:
+  media_volume:

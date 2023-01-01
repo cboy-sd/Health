@@ -1,0 +1,205 @@
+<div class="header">
+    <div class="header-left">
+        <a href="admin_dashboard.html" class="logo">
+            <img src="/static/assets/img/logo.png" alt="Logo">
+        </a>
+        <a href="admin_dashboard.html" class="logo logo-small">
+            <img src="/static/assets/img/logo-small.png" alt="Logo" width="30" height="30">
+        </a>
+    </div>
+    <a href="javascript:void(0);" id="toggle_btn">
+        <i class="fas fa-align-left"></i>
+    </a>
+    <div class="top-nav-search">
+        <form>
+            <input type="text" class="form-control" placeholder="ابحث هنا">
+            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    <a class="mobile_btn" id="mobile_btn">
+        <i class="fas fa-bars"></i>
+    </a>
+    <ul class="nav user-menu">
+        <li class="nav-item dropdown noti-dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <i class="far fa-bell"></i> <span class="badge badge-pill">3</span>
+            </a>
+            <div class="dropdown-menu notifications">
+                <div class="topnav-dropdown-header">
+                    <span class="notification-title">الإشعارات</span>
+                    <a href="javascript:void(0)" class="clear-noti"> حذف الكل </a>
+                </div>
+                <div class="noti-content">
+                    <ul class="notification-list">
+                        <li class="notification-message">
+                            <a href="#">
+                                <div class="media">
+                           <span class="avatar avatar-sm">
+                              <img class="avatar-img rounded-circle" alt="User Image"
+                                   src="/static/assets/img/profiles/avatar-02.jpg">
+                           </span>
+                                    <div class="media-body">
+                                        <p class="noti-details"><span class="noti-title">Carlson Tech</span> has
+                                            approved <span class="noti-title">your estimate</span></p>
+                                        <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notification-message">
+                            <a href="#">
+                                <div class="media">
+                           <span class="avatar avatar-sm">
+                              <img class="avatar-img rounded-circle" alt="User Image"
+                                   src="/static/assets/img/profiles/avatar-11.jpg">
+                           </span>
+                                    <div class="media-body">
+                                        <p class="noti-details"><span
+                                                class="noti-title">International Software Inc</span> has sent you a
+                                            invoice in the amount of <span class="noti-title">$218</span></p>
+                                        <p class="noti-time"><span class="notification-time">6 mins ago</span></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notification-message">
+                            <a href="#">
+                                <div class="media">
+                           <span class="avatar avatar-sm">
+                              <img class="avatar-img rounded-circle" alt="User Image"
+                                   src="/static/assets/img/profiles/avatar-17.jpg">
+                           </span>
+                                    <div class="media-body">
+                                        <p class="noti-details"><span class="noti-title">John Hendry</span> sent a
+                                            cancellation request <span class="noti-title">Apple iPhone XR</span></p>
+                                        <p class="noti-time"><span class="notification-time">8 mins ago</span></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notification-message">
+                            <a href="#">
+                                <div class="media">
+                           <span class="avatar avatar-sm">
+                              <img class="avatar-img rounded-circle" alt="User Image"
+                                   src="/static/assets/img/profiles/avatar-13.jpg">
+                           </span>
+                                    <div class="media-body">
+                                        <p class="noti-details"><span class="noti-title">Mercury Software Inc</span>
+                                            added a new product <span class="noti-title">Apple MacBook Pro</span></p>
+                                        <p class="noti-time"><span class="notification-time">12 mins ago</span></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="topnav-dropdown-footer">
+                    <a href="#">عرض جميع الإشعارات</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item dropdown has-arrow">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <span class="user-img"><img class="rounded-circle" src="/static/assets/img/profiles/avatar-10.jpg"
+                                            width="31" alt="Ryan Taylor"></span>
+            </a>
+            <div class="dropdown-menu">
+                <div class="user-header">
+                    <div class="avatar avatar-sm">
+                        <img src="/static/assets/img/profiles/avatar-10.jpg" alt="User Image"
+                             class="avatar-img rounded-circle">
+                    </div>
+                    <div class="user-text">
+                        <h6>محمد الطيب</h6>
+                        <p class="text-muted mb-0">مدير</p>
+                    </div>
+                </div>
+                <a class="dropdown-item" href="profile.html">ملفي الشخصي</a>
+                <!-- <a class="dropdown-item" href="inbox.html">صندوق الوارد</a> -->
+                <a class="dropdown-item" href="index.html">تسجيل الخروج</a>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title">
+                    <span>القائمة الرئيسية</span>
+                </li>
+
+                <li class="submenu">
+                    <!-- <li class="submenu active"> -->
+                    <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> لوحة التحكم</span> <span
+                            class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:admin_dashboard_page' %}">تحكم المسؤول</a></li>
+                        <li><a href="{% url 'dashboard_site:doctor_dashboard_page' %}">تحكم الطبيب</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-file"></i> <span> الطلبات</span> <span
+                            class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:order_list_page' %}">قائمة الطلبات</a></li>
+                        <li><a href="{% url 'dashboard_site:order_add_page' %}">إضافة طلب</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-calendar-day"></i> <span> المقابلات</span> <span
+                            class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:appointment_list_page' %}">قائمة الحجوزات</a></li>
+                        {#                        <li><a href="{% url 'dashboard_site:appointment_add_page' %}">إضافة حجز</a></li> #}
+                        {#                        <li><a href="{% url 'dashboard_site:interviews_page' %}">قائمة المقابلات</a></li> #}
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-book-reader"></i> <span> الأطباء</span> <span
+                            class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:doctor_list_page' %}">قائمة الأطباء</a></li>
+                        <li><a href="{% url 'dashboard_site:doctor_add_page' %}">إضافة طبيب</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title">
+                    <span>إدارة</span>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-clipboard-list"></i> <span> المرضي</span> <span
+                            class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:patient_list_page' %}">قائمة المرضي</a></li>
+                        <li><a href="{% url 'dashboard_site:patient_add_page' %}">إضافة مريض</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#">
+                        <i class="fas fa-file-invoice-dollar"></i> <span> حسابات مالية</span> <span
+                            class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{% url 'dashboard_site:total_balance_list_page' %}">الحسابات</a></li>
+                        <li><a href="withdrawal_request.html">طلب سحب</a></li>
+                        <li><a href="withdrawal.html">سحب مبلغ مالي</a></li>
+                        <li><a href="withdrawal_report.html">تقرير سحوبات</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="index.html"><span> تسجيل الخروج</span></a>
+
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,232 @@
+{% load math %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>الإسبيتاليا - رصيد الأطباء</title>
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap-rtl.css">
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+
+<body>
+<div class="main-wrapper">
+
+    {% include 'dashboard_site/navbar.html' %}
+
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">رصيد الأطباء</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">حسابات مالية</a></li>
+                            <li class="breadcrumb-item active">رصيد الأطباء</li>
+                        </ul>
+                    </div>
+                    <div class="col-auto text-right float-right ml-auto">
+                        <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> تحميل</a>
+                        <a href="#" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <div class="card card-table">
+
+                        <div class="card-body">
+
+                            <div class="col-12">
+
+                                <h5 class="form-title"><span>تفاصيل الخزنة</span></h5>
+
+                            </div>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-center mb-0 datatable">
+
+                                    <form>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                            <th class="text-center">رصيد أطباء</th>
+                                            <th class="text-center">رصيد إسبيتاليا</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                {{ incoming_completed_balance.total_cost|add_to:doctors_wallet_balance.total_balance|add_to:espitalia_wallet.balance }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ incoming_completed_balance.appointment_cost|add_to:doctors_wallet_balance.total_balance }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ incoming_completed_balance.espitalia_cost|add_to:espitalia_wallet.balance }}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </form>
+
+                                </table>
+
+                            </div>
+
+                            <div class="col-12 mt-5">
+
+                                <h5 class="form-title"><span>تفاصيل المبالغ المستحقه</span></h5>
+
+                            </div>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-center mb-0 datatable">
+
+                                    <form>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                            <th class="text-center">رصيد أطباء</th>
+                                            <th class="text-center">رصيد إسبيتاليا</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center">{{ completed_balance.total_cost|add_to:doctors_wallet_balance.total_balance|add_to:espitalia_wallet.balance }}</td>
+                                            <td class="text-center">{{ completed_balance.appointment_cost|add_to:doctors_wallet_balance.total_balance }}</td>
+                                            <td class="text-center">{{ completed_balance.espitalia_cost|add_to:espitalia_wallet.balance }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </form>
+
+                                </table>
+
+                            </div>
+
+                            <div class="col-12 mt-5">
+
+                                <h5 class="form-title"><span>تفاصيل المبالغ المعلقه</span></h5>
+
+                            </div>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-center mb-0 datatable">
+
+                                    <form>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                            <th class="text-center">رصيد أطباء</th>
+                                            <th class="text-center">رصيد إسبيتاليا</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center">{{ incoming_balance.total_cost }}</td>
+                                            <td class="text-center">{{ incoming_balance.appointment_cost }}</td>
+                                            <td class="text-center">{{ incoming_balance.espitalia_cost }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </form>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+
+                            <div class="col-12 mt-2">
+                                <h5 class="form-title"><span>تفاصيل رصيد الأطباء</span></h5>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover table-center mb-0 datatable">
+                                    <form>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">اسم الطبيب</th>
+                                            <th class="text-center">رصيد المحفظه</th>
+                                            <th class="text-center">الرصيد المستحق</th>
+                                            <th class="text-center">الرصيد المعلق</th>
+                                            <th class="text-center">تفاصيل الرصيد</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for doctor_balance in doctor_balances %}
+                                            <tr>
+                                                <td class="text-center">
+                                                    <a href="{% url 'dashboard_site:doctor_details_page' doctor_balance.doctor %}">{{ doctor_balance.doctor__user__full_name }}</a>
+                                                </td>
+                                                <td class="text-center">{{ doctor_balance.doctor_wallet_balance }}</td>
+                                                <td class="text-center">{{ doctor_balance.completed_appointment_cost }}</td>
+                                                <td class="text-center">{{ doctor_balance.incoming_appointment_cost }}</td>
+                                                <td class="text-center">
+                                                    <a href="{% url 'dashboard_site:doctor_balance_details_page' doctor_balance.doctor %}">عرض
+                                                        تقرير</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </form>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <footer>
+            <p>الحقوق محفوظة © 2023 لدي عيادات الإسبيتاليا.</p>
+            <p>تم التنفيذ بواسطة <a href="https://alhasif.com"> <img class="avatar-img rounded-circle"
+                                                                     src="/static/assets/img/alhasif_logo.png"
+                                                                     alt="alhasif"
+                                                                     width="50"> شركة الحصيف العالمية المحدودة</a></p>
+        </footer>
+
+    </div>
+
+
+</div>
+<script src="/static/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/static/assets/js/popper.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="/static/assets/plugins/apexchart/chart-data.js"></script>
+<script src="/static/assets/js/script.js"></script>
+</body>
+
+</html>

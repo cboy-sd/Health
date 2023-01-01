@@ -1,0 +1,5 @@
+/.env
+/core/dashboard_site/migrations/
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

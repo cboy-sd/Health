@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>الإسبيتاليا - لوحة التحكم</title>
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap-rtl.css">
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+<body>
+<div class="main-wrapper">
+
+    {% include 'dashboard_site/navbar.html' %}
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">مرحبا بكم الإدارة !</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item active">لوحة التحكم</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                    <div class="card bg-one w-100">
+                        <div class="card-body">
+                            <div class="db-widgets d-flex justify-content-between align-items-center">
+                                <div class="db-icon">
+                                    <i class="fas fa-book-reader"></i>
+                                </div>
+                                <div class="db-info">
+                                    <h3>150</h3>
+                                    <h6>الأطباء</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                    <div class="card bg-two w-100">
+                        <div class="card-body">
+                            <div class="db-widgets d-flex justify-content-between align-items-center">
+                                <div class="db-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="db-info">
+                                    <h3>500</h3>
+                                    <h6>مريض</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                    <div class="card bg-three w-100">
+                        <div class="card-body">
+                            <div class="db-widgets d-flex justify-content-between align-items-center">
+                                <div class="db-icon">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="db-info">
+                                    <h3>20</h3>
+                                    <h6>مقابلة</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                    <div class="card bg-four w-100">
+                        <div class="card-body">
+                            <div class="db-widgets d-flex justify-content-between align-items-center">
+                                <div class="db-icon">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <div class="db-info">
+                                    <h3>25000</h3>
+                                    <h6>الخزنة</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-header">
+                            <h5 class="card-title">مقابلات اليوم</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-center">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th class="text-center">إسم المريض</th>
+                                        <th class="text-center">مع الطبيب</th>
+                                        <th class="text-right">رقم الهاتف</th>
+                                        <th class="text-right">زمن المقابلة</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <div>1</div>
+                                        </td>
+                                        <td class="text-nowrap">ahmed</td>
+                                        <td class="text-center">dr. khaled</td>
+                                        <td class="text-center">0999995952</td>
+                                        <td class="text-center">10:00 am</td>
+                                        <td class="text-right">
+                                            <div>2019</div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <div>2</div>
+                                        </td>
+                                        <td class="text-nowrap">mohamed</td>
+                                        <td class="text-center">dr. Mona</td>
+                                        <td class="text-center">0125525542</td>
+                                        <td class="text-center">12:00 am</td>
+                                        <td class="text-right">
+                                            <div>2019</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <div>3</div>
+                                        </td>
+                                        <td class="text-nowrap">ali</td>
+                                        <td class="text-center">dr. khaled</td>
+                                        <td class="text-center">0999995952</td>
+                                        <td class="text-center">14:00 am</td>
+                                        <td class="text-right">
+                                            <div>2019</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <div>4</div>
+                                        </td>
+                                        <td class="text-nowrap">ola</td>
+                                        <td class="text-center">dr. Mona</td>
+                                        <td class="text-center">09905545854</td>
+                                        <td class="text-center">20:00 am</td>
+                                        <td class="text-right">
+                                            <div>2019</div>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 col-lg-6">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <h5 class="card-title">تحليل البيانات</h5>
+                                </div>
+                                <div class="col-6">
+                                    <ul class="list-inline-group text-right mb-0 pl-0">
+                                        <li class="list-inline-item">
+                                            <div class="form-group mb-0 amount-spent-select">
+                                                <select class="form-control form-control-sm">
+                                                    <option>اليوم</option>
+                                                    <option>الأسبوع الماضي</option>
+                                                    <option>الشهر الماضي</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="apexcharts-area"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <footer>
+            <p>الحقوق محفوظة © 2022 لدي عيادات الإسبيتاليا.</p>
+            <p>تم التنفيذ بواسطة <a href="https://alhasif.com"> <img class="avatar-img rounded-circle"
+                                                                     src="/static/assets/img/alhasif_logo.png"
+                                                                     alt="alhasif" width="50"> شركة الحصيف العالمية
+                المحدودة</a></p>
+        </footer>
+    </div>
+
+</div>
+<script src="/static/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/static/assets/js/popper.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="/static/assets/plugins/apexchart/chart-data.js"></script>
+<script src="/static/assets/js/script.js"></script>
+</body>
+
+</html>
