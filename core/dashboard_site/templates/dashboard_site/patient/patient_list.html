@@ -1,0 +1,221 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+{% block css_block %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+
+        <div class="row align-items-center">
+
+            <div class="col">
+                <h3 class="page-title">قائمة المرضي</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">المرضي</a></li>
+                    <li class="breadcrumb-item active">قائمة المرضي</li>
+                </ul>
+            </div>
+
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="{% url 'dashboard_site:patient_add_page' %}" class="btn btn-primary"><i
+                        class="fas fa-plus"></i></a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12 mb-3">
+            <form method="GET">
+                <div class="row">
+
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button id="select-patient-clear" class="btn btn-outline-secondary" type="button">Clear
+                                </button>
+                            </div>
+                            <select
+                                    id="select-patient"
+                                    class="form-control"
+                                    name="patient_id"
+                            >
+                                <option selected disabled>بحث باسم المريض</option>
+                                {% if request.GET.patient_id %}
+                                    <option value="{{ request.GET.patient_id }}" selected>{{ patient_name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-12 p-2">
+                        <select name="is_active" class="custom-select">
+                            <option value="1" {% if request.GET.is_active == '1' %} selected {% endif %}>مفعل</option>
+                            <option value="0" {% if request.GET.is_active == '0' %} selected {% endif %}>غير مفعل
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                بحث
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <thead>
+                            <tr>
+                                <th>اسم المريض</th>
+                                <th>العنوان</th>
+                                <th>رقم الهاتف</th>
+                                <th>رقم هاتف آخر</th>
+                                <th class="text-right">خيارات إدارة</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for patient in patients %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'dashboard_site:patient_details_page' patient.pk %}">
+                                            {{ patient.user.full_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ patient.address }}</td>
+                                    <td>{{ patient.user.phone_number }}</td>
+                                    <td>{{ patient.user.phone_number_2 }}</td>
+                                    <td class="text-right">
+                                        <div class="actions">
+                                            <a href="{% url "dashboard_site:patient_edit_page" patient.pk %}"
+                                               class="btn btn-sm bg-success-light mr-2">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                            {% if patient.is_active %}
+                                                <a href="{% url "dashboard_site:patient_delete_page" patient.pk '0' %}"
+                                                   class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% else %}
+                                                <a href="{% url "dashboard_site:patient_delete_page" patient.pk '1' %}"
+                                                   class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    {% if patients.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ patients.paginator.num_pages }}">Last</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ patients.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ patients.number }} of {{ patients.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    {% if patients.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ patients.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                               tabindex="-1">First</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $('#select-patient').select2({
+            ajax: {
+                url: '/api/patient/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-patient-clear').click(() => {
+            $('#select-patient').val(null).trigger('change');
+        });
+
+    </script>
+
+{% endblock %}

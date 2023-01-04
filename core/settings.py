@@ -24,6 +24,9 @@ ALLOWED_HOSTS = ['*']
 CUSTOM_APPS = [
     'core.account_management',
     'core.dashboard_site',
+    'core.doctor',
+    'core.patient',
+    'core.appointment'
 ]
 
 EXTERNAL_APPS = [
@@ -32,6 +35,7 @@ EXTERNAL_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'django_cleanup.apps.CleanupConfig',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = [
@@ -43,14 +47,17 @@ INSTALLED_APPS = [
                      'django.contrib.staticfiles',
                  ] + EXTERNAL_APPS + CUSTOM_APPS
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # core middleware
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -74,7 +81,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
 if env.bool('USE_MYSQL', default=False):
     DATABASES = {
         'default': {

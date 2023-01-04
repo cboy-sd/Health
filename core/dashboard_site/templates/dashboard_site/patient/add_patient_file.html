@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>الإسبيتاليا - إضافة طبيب</title>
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap-rtl.css">
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+
+<body>
+<div class="main-wrapper">
+
+    {% include 'dashboard_site/navbar.html' %}
+
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">إضافة خبره</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                            <li class="breadcrumb-item active">إضافة خبرات طبيب</li>
+                        </ul>
+                    </div>
+                    <div class="col-auto text-right float-right ml-auto">
+                        <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                            رجوع
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-sm-12">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form action="{% url "dashboard_site:patient_file_add_page" patient.pk %}" method="POST"
+                                  enctype="multipart/form-data">
+
+                                {% csrf_token %}
+
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}"/>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span> اضافة ملف المريض</span></h5>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label>الملف </label>
+                                            <input type="file" name="file" class="form-control" require>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">تأكيد الإضافة</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <footer>
+            <p>الحقوق محفوظة © 2022 لدي عيادات الإسبيتاليا.</p>
+            <p>تم التنفيذ بواسطة <a href="https://alhasif.com"> <img class="avatar-img rounded-circle"
+                                                                     src="/static/assets/img/alhasif_logo.png"
+                                                                     alt="alhasif" width="50"> شركة الحصيف العالمية
+                المحدودة</a></p>
+        </footer>
+    </div>
+
+
+</div>
+<script src="/static/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/static/assets/js/popper.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="/static/assets/plugins/apexchart/chart-data.js"></script>
+<script src="/static/assets/js/script.js"></script>
+</body>
+
+</html>

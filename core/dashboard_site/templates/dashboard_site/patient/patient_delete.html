@@ -1,0 +1,176 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">إضافة مريض جديد</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">المريض</a></li>
+                    <li class="breadcrumb-item active">إضافة مريض</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="{% url "dashboard_site:patient_delete_page" patient.pk active %}"
+                          method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="{{ redirect_field_name }}"
+                               value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات المريض</span></h5>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>إسم المريض</label>
+                                    <input type="text" name="full_name" value="{{ patient.user.full_name }}"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>
+
+                                        {% if patient.user.profile %}
+                                            <a href="{{ patient.user.profile.url }}">
+                                                صورة المريض
+                                            </a>
+                                        {% else %}
+                                            صورة المريض
+                                        {% endif %}
+
+                                    </label>
+                                    <input type="file" name="profile" class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف</label>
+                                    <input type="number" name="phone_number_1"
+                                           value="{{ patient.user.phone_number }}" class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف آخر</label>
+                                    <input type="number" name="phone_number_2"
+                                           value="{{ patient.user.phone_number_2 }}" class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>العنوان</label>
+                                    <input type="text" name="address" value="{{ patient.address }}"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الهويه</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>نوع الهويه</label>
+                                    <input type="text" name="identity_type" value="{{ patient.identity_type }}"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهويه</label>
+                                    <input type="text" name="identity_no" value="{{ patient.identity_no }}"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>
+
+                                        {% if patient.front_id_image %}
+                                            <a href="{{ patient.front_id_image.url }}">
+                                                صورة المقدمه للهويه
+                                            </a>
+                                        {% else %}
+                                            صورة المقدمه للهويه
+                                        {% endif %}
+
+                                    </label>
+                                    <input type="file" name="front_id_image" class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>
+                                        {% if patient.back_id_image %}
+                                            <a href="{{ patient.back_id_image.url }}">
+                                                صورة الخلفيه للهويه
+                                            </a>
+                                        {% else %}
+                                            صورة الخلفيه للهويه
+                                        {% endif %}
+                                    </label>
+                                    <input type="file" name="back_id_image" class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الحساب</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني / إسم مستخدم</label>
+                                    <input type="text" name="username" value="{{ patient.user.email }}"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>كلمة المرور</label>
+                                    <input type="password" name="password" value="**************"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">تأكيد الحذف</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

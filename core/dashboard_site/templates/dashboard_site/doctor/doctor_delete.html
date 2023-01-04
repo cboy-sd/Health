@@ -1,0 +1,190 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">تعديل بيانات</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                    <li class="breadcrumb-item active">تعديل بيانات طبيب</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form
+                            action="{% url "dashboard_site:doctor_delete_page" doctor.pk %}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                    >
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="{{ redirect_field_name }}"
+                               value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الطبيب</span></h5>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>إسم الطبيب</label>
+                                    <input
+                                            type="text"
+                                            name="name"
+                                            value="{{ doctor.user.full_name }}"
+                                            class="form-control" required
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>اسم العياده</label>
+                                    <input
+                                            type="text"
+                                            name="hospital"
+                                            value="{{ doctor.hospital }}"
+                                            class="form-control"
+                                            required
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>تخصص الطبيب</label>
+                                    <input
+                                            type="text"
+                                            name="specialization"
+                                            value="{{ doctor.specialization }}"
+                                            class="form-control" required
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>
+                                        {% if doctor.user.profile %}
+                                            <a href="{{ doctor.user.profile.url }}">
+                                                صورة الطبيب
+                                            </a>
+                                        {% else %}
+                                            صورة الطبيب
+                                        {% endif %}
+                                    </label>
+                                    <input type="file" name="profile"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف</label>
+                                    <input type="number" name="phone_number_1"
+                                           value="{{ doctor.user.phone_number }}" class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف آخر</label>
+                                    <input type="number" name="phone_number_2"
+                                           value="{{ doctor.user.phone_number_2 }}" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات التسعير</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>سعر العيادة</label>
+                                    <input type="text" name="appointment_cost"
+                                           value="{{ doctor.appointment_cost }}" class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>سعر إسبيتاليا</label>
+                                    <input type="text" name="espitalia_cost" value="{{ doctor.espitalia_cost }}"
+                                           class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>استلام الدفعيات</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>نوع الحساب البنكي</label>
+                                    <input type="text" name="bank_account_type"
+                                           value="{{ doctor.bank_account_type }}" class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الحساب البنكي</label>
+                                    <input type="text" name="bank_account" value="{{ doctor.bank_account }}"
+                                           class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الحساب</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني / إسم مستخدم</label>
+                                    <input type="text" name="username" value="{{ doctor.user.email }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>كلمة المرور</label>
+                                    <input
+                                            type="password"
+                                            name="password"
+                                            value="**************"
+                                            class="form-control"
+                                            disabled
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">الغاء تفعيل</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -44,7 +44,7 @@ services:
              gunicorn --access-logfile /app/logs/gunicorn-access.log --error-logfile /app/logs/gunicorn-error.log --workers 3 --bind 0.0.0.0:8000 core.wsgi:application"
 
     restart: always
-    image: shoppingo_backend
+    image: healthcare_backend
 
   db:
     env_file:

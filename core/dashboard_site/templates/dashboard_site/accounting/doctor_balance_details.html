@@ -1,0 +1,318 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+{% block css_block %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">تفاصيل رصيد طبيب</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">حسابات مالية</a></li>
+                    <li class="breadcrumb-item active">رصيد الأطباء</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="{% url 'dashboard_site:wallet_withdraw_order_page' doctor_wallet.pk %}"
+                   class="btn btn-outline-primary mr-2"><i class="fas fa-upload"></i> طلب سحب</a>
+                {#                        <a href="#" class="btn btn-primary"><i class="fas fa-plus"></i></a>#}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <div class="col-12">
+                        <h5 class="form-title">
+                            <span>
+                                تفاصيل الرصيد
+                                <strong class="text-primary">
+                                    - {{ doctor.user.full_name }}
+                                </strong>
+                            </span>
+                        </h5>
+                    </div>
+
+                    <div class="col-12 row">
+
+                        <div class="col-xl-4 col-sm-6 col-12 d-flex">
+                            <div class="card bg-four w-100">
+                                <div class="card-body">
+                                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                                        <div class="db-icon">
+                                            <i class="fas fa-file-invoice-dollar"></i>
+                                        </div>
+                                        <div class="db-info">
+                                            <h3>{{ doctor_wallet.balance }}</h3>
+                                            <h6>رصيد المحفظه</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-sm-6 col-12 d-flex">
+                            <div class="card bg-two w-100">
+                                <div class="card-body">
+                                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                                        <div class="db-icon">
+                                            <i class="fas fa-file-invoice-dollar"></i>
+                                        </div>
+                                        <div class="db-info">
+                                            <h3>
+                                                {{ completed_appointment_balance }}
+                                            </h3>
+                                            <h6>رصيد قابل للسحب</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-sm-6 col-12 d-flex">
+                            <div class="card bg-three w-100">
+                                <div class="card-body">
+                                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                                        <div class="db-icon">
+                                            <i class="fas fa-file-invoice-dollar"></i>
+                                        </div>
+                                        <div class="db-info">
+                                            <h3>{{ incoming_appointment_balance }}</h3>
+                                            <h6>الرصيد في الانتظار</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+                        {% if completed_appointment_balance > 0 %}
+                            <a href="{% url 'dashboard_site:collect_all_appointment_balance_to_wallet_page' doctor.pk %}"
+                               class="btn btn-outline-success mr-2">
+                                <i class="fas fa-donate"></i>
+                                {{ completed_appointment_balance }}
+                                تجميع الرصيد
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12 mb-3">
+            <form method="GET">
+                <div class="row">
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button id="select-patient-clear" class="btn btn-outline-secondary" type="button">Clear
+                                </button>
+                            </div>
+                            <select
+                                    id="select-patient"
+                                    class="form-control"
+                                    name="patient_id"
+                            >
+                                <option selected disabled>بحث باسم المريض</option>
+                                {% if request.GET.patient_id %}
+                                    <option value="{{ request.GET.patient_id }}" selected>{{ patient_name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12 p-2">
+                        <select name="status" class="custom-select">
+                            <option value="COMPLETED" {% if request.GET.status == 'COMPLETED' %} selected {% endif %}>
+                                مقابلات منتهيه
+                            </option>
+                            <option value="INCOMING" {% if request.GET.status == 'INCOMING' %} selected {% endif %}>
+                                مقابلات قادمه
+                            </option>
+                            <option value="ALL" {% if request.GET.status == 'ALL' %} selected {% endif %}>
+                                كل المقابلات
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                بحث
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <div class="col-12">
+                        <h5 class="form-title"><span>تقرير الرصيد</span></h5>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th>المريض</th>
+                                    <th>التاريخ</th>
+                                    <th>وقت البدايه</th>
+                                    <th>وقت النهايه</th>
+                                    <th>قيمة المقابلة</th>
+                                    <th class="text-center">السحب</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for appointment in appointments %}
+                                    <tr>
+                                        <td>
+                                            <a
+                                                    href="{% url 'dashboard_site:patient_details_page' appointment.patient.pk %}"
+                                            >
+                                                {{ appointment.patient.user.full_name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ appointment.start_date | date:"d-m-Y" }}</td>
+                                        <td>{{ appointment.start_date | date:"h:i A" }}</td>
+                                        <td>{{ appointment.end_date | date:"h:i A" }}</td>
+                                        <td>
+                                            {{ appointment.appointment_cost }}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <div class="actions">
+                                                {% if appointment.appointment_status == 'COMPLETED' %}
+                                                    <a href="{% url 'dashboard_site:collect_appointment_balance_to_wallet_page' appointment.pk %}"
+                                                       class="btn btn-sm bg-success text-white mr-2">
+                                                        اضافه للرصيد
+                                                    </a>
+                                                {% else %}
+                                                    <a class="btn btn-sm bg-success-light mr-2 disabled">
+                                                        في الانتظار
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </form>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    {% if appointments.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.paginator.num_pages }}">Last</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    {% if appointments.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                               tabindex="-1">First</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $('#select-patient').select2({
+            ajax: {
+                url: '/api/patient/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-patient-clear').click(() => {
+            $('#select-patient').val(null).trigger('change');
+        });
+
+    </script>
+
+{% endblock %}

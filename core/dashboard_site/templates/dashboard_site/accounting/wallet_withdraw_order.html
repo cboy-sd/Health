@@ -1,0 +1,206 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">سحب مبلغ</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">حسابات مالية</a></li>
+                    <li class="breadcrumb-item active">سحب مبلغ مالي</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="{% url 'dashboard_site:wallet_withdraw_order_page' wallet.pk %}"
+                          method="POST">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title">
+                                            <span>
+                                                سحب جدبد من
+                                                {{ wallet.balance }}
+                                            </span>
+                                </h5>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>المبلغ المالي !</label>
+                                    <input type="number" name="amount" class="form-control" require>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>تفاصيل السحب</label>
+                                    <input type="text" name="note" class="form-control" require>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">سحب من الخزنة</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12 mb-3">
+            <form method="GET">
+                <div class="row">
+
+                    <div class="col-md-3 col-12 p-2">
+                        <select name="status" class="custom-select">
+                            <option value="ALL" {% if request.GET.status == 'ALL' %} selected {% endif %}>
+                                كل الطلبات
+                            </option>
+                            <option value="PENDING" {% if request.GET.status == 'PENDING' %} selected {% endif %}>
+                                طلبات في الانتظار
+                            </option>
+                            <option value="ACCEPTED" {% if request.GET.status == 'ACCEPTED' %} selected {% endif %}>
+                                طلبات مقبوله
+                            </option>
+                            <option value="REJECTED" {% if request.GET.status == 'REJECTED' %} selected {% endif %}>
+                                طلبات مرفوضه
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                بحث
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="col-12">
+                        <h5 class="form-title"><span>آخر السحوبات من الخزينة</span></h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th>المبلغ</th>
+                                    <th>التفاصيل</th>
+                                    <th>التاريخ</th>
+                                    <th>الوقت</th>
+                                    <th class="text-center">الحاله</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for wallet_withdraw in wallet_withdraws %}
+                                    <tr>
+                                        <td>{{ wallet_withdraw.amount }}</td>
+                                        <td>{{ wallet_withdraw.note }}</td>
+                                        <td>{{ wallet_withdraw.created | date:"d-m-Y" }}</td>
+                                        <td>{{ wallet_withdraw.created | date:"h:i A" }}</td>
+                                        <td class="text-center">
+                                            {% if wallet_withdraw.status == 'PENDING' %}
+                                                <a
+                                                        href=""
+                                                        class="btn btn-sm bg-success-light mr-2 disabled">
+                                                    تحت المعالجه
+                                                </a>
+                                            {% elif wallet_withdraw.status == 'ACCEPTED' %}
+                                                <a
+                                                        href=""
+                                                        class="btn btn-sm bg-success text-white mr-2">
+                                                    تم التحويل
+                                                </a>
+                                            {% elif wallet_withdraw.status == 'REJECTED' %}
+                                                <a
+                                                        href=""
+                                                        class="btn btn-sm bg-danger text-white mr-2">
+                                                    تم رفض التحويل
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </form>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+
+            <nav aria-label="...">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if wallet_withdraws.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ wallet_withdraws.paginator.num_pages }}">Last</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ wallet_withdraws.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ wallet_withdraws.number }} of {{ wallet_withdraws.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    {% if wallet_withdraws.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ wallet_withdraws.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                               tabindex="-1">First</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

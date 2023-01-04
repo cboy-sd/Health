@@ -49,4 +49,3 @@ def all_orders(request):
             "patients": orders
         }
         return render(request, "", context=context)
-

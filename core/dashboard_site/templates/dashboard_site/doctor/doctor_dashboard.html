@@ -1,0 +1,199 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+{% block content %}
+
+    <div class="page-header">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">مرحبا بك {{ request.user.full_name }} !</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active">لوحة التحكم</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-xl-3 col-sm-6 col-12 d-flex">
+            <div class="card bg-one w-100">
+                <div class="card-body">
+                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                        <div class="db-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="db-info">
+                            <h3>{{ doctor_incoming_appointments_count }}</h3>
+                            <h6>المقابلات القادمه</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 col-12 d-flex">
+            <div class="card bg-two w-100">
+                <div class="card-body">
+                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                        <div class="db-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="db-info">
+                            <h3>{{ doctor_patients_count.patient_count }}</h3>
+                            <h6>مريض</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 col-12 d-flex">
+            <div class="card bg-three w-100">
+                <div class="card-body">
+                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                        <div class="db-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="db-info">
+                            <h3>{{ doctor_appointment_count }}</h3>
+                            <h6>مقابلة تمت</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 col-12 d-flex">
+            <div class="card bg-four w-100">
+                <div class="card-body">
+                    <div class="db-widgets d-flex justify-content-between align-items-center">
+                        <div class="db-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="db-info">
+                            <h3>{{ doctor_wallet.balance }}</h3>
+                            <h6>الرصيد</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 row">
+
+            <div class="col-md-12 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <h5 class="card-title">مقابلات اليوم</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="text-left">إسم المريض</th>
+                                    <th class="text-left">زمن بداية المقابله</th>
+                                    <th class="text-left">زمن نهاية المقابله</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for appointment in today_appointment %}
+                                    <tr class="{% if appointment.appointment_late %}table-danger{% endif %}">
+                                        <td class="text-nowrap">
+                                            <a href="{% url 'dashboard_site:patient_details_page' appointment.patient.pk %}">
+                                                {{ appointment.patient.user.full_name }}
+                                            </a>
+                                        </td>
+                                        <td class="text-left">
+                                            {{ appointment.start_date | time:'H:i A' }}
+                                        </td>
+                                        <td class="text-left">
+                                            {{ appointment.end_date | time:'H:i A' }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 text-center">
+                <nav aria-label="...">
+                    <ul class="pagination justify-content-center">
+                        {% if today_appointment.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ request.get_full_path | process_full_path }}page={{ today_appointment.paginator.num_pages }}">Last</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ request.get_full_path | process_full_path }}page={{ today_appointment.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <a class="page-link" href="#">
+                                Page {{ today_appointment.number }} of {{ today_appointment.paginator.num_pages }}
+                            </a>
+                        </li>
+
+                        {% if today_appointment.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ request.get_full_path | process_full_path }}page={{ today_appointment.previous_page_number }}"
+                                   tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                                   tabindex="-1">First</a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="card card-chart">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <h5 class="card-title">تحليل البيانات</h5>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-inline-group text-right mb-0 pl-0">
+                                <li class="list-inline-item">
+                                    <div class="form-group mb-0 amount-spent-select">
+                                        <select class="form-control form-control-sm">
+                                            <option>اليوم</option>
+                                            <option>الأسبوع الماضي</option>
+                                            <option>الشهر الماضي</option>
+                                        </select>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="apexcharts-area"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">تعديل بيانات</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                    <li class="breadcrumb-item active">تعديل بيانات طبيب</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="{% url "dashboard_site:doctor_time_edit_page" doctor.pk doctor_time.pk %}"
+                          method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden"
+                               name="{{ redirect_field_name }}"
+                               value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>مواعيد العمل</span></h5>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>تاريخ المقابله</label>
+                                    <select class="form-control {% if form.errors.days %} is-invalid {% endif %}"
+                                            name="days" required>
+                                        <option disabled>يوم الاسبوع</option>
+                                        <option {% if doctor_time.days == 'SAT' %} selected {% endif %}
+                                                                                   value="SAT">يوم السبت
+                                        </option>
+                                        <option {% if doctor_time.days == 'SUN' %} selected {% endif %}
+                                                                                   value="SUN">يوم الأحد
+                                        </option>
+                                        <option {% if doctor_time.days == 'MON' %} selected {% endif %}
+                                                                                   value="MON">يوم الإثنين
+                                        </option>
+                                        <option {% if doctor_time.days == 'TUE' %} selected {% endif %}
+                                                                                   value="TUE">يوم الثلاثاء
+                                        </option>
+                                        <option {% if doctor_time.days == 'WED' %} selected {% endif %}
+                                                                                   value="WED">يوم الأربعاء
+                                        </option>
+                                        <option {% if doctor_time.days == 'THU' %} selected {% endif %}
+                                                                                   value="THU">يوم الخميس
+                                        </option>
+                                        <option {% if doctor_time.days == 'FRI' %} selected {% endif %}
+                                                                                   value="FRI">يوم الجمعة
+                                        </option>
+                                    </select>
+                                    {% for error in form.errors.days %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>بدأ المقابله</label>
+                                    <input
+                                            type="time"
+                                            name="start_hour"
+                                            {% if form.start_hour %}
+                                            value="{{ form.start_hour|time:"H:i:s" }}"
+                                            {% else %}
+                                            value="{{ doctor_time.start_hour|time:"H:i:s" }}"
+                                            {% endif %}
+                                            class="form-control {% if form.errors.start_hour %} is-invalid {% endif %}"
+                                            required
+                                    >
+                                    {% for error in form.errors.start_hour %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>إنتهاء المقابله</label>
+                                    <input
+                                            type="time"
+                                            name="end_hour"
+                                            {% if form.end_hour %}
+                                            value="{{ form.end_hour|time:"H:i:s" }}"
+                                            {% else %}
+                                            value="{{ doctor_time.end_hour|time:"H:i:s" }}"
+                                            {% endif %}
+                                            class="form-control"
+                                            required
+                                    >
+                                    {% for error in form.errors.start_hour %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">تأكيد التعديل</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

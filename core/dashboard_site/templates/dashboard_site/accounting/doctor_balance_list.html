@@ -1,0 +1,208 @@
+{% extends 'dashboard_site/base.html' %}
+{% load math url_params %}
+
+{% block css_block %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">رصيد الأطباء</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">حسابات مالية</a></li>
+                    <li class="breadcrumb-item active">رصيد الأطباء</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12 mb-3">
+            <form method="GET">
+                <div class="row">
+
+                    <div class="col-md-3 col-12 p-2">
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button id="select-doctor-clear" class="btn btn-outline-secondary" type="button">Clear
+                                </button>
+                            </div>
+                            <select
+                                    id="select-doctor"
+                                    class="form-control"
+                                    name="doctor_id"
+                                    style="height: 40px"
+                            >
+                                <option selected disabled>بحث باسم الطبيب</option>
+                                {% if request.GET.doctor_id %}
+                                    <option value="{{ request.GET.doctor_id }}" selected>{{ doctor_name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                بحث
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <div class="col-12 mt-2">
+                        <h5 class="form-title"><span>تفاصيل رصيد الأطباء</span></h5>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">اسم الطبيب</th>
+                                    <th class="text-center">رصيد المحفظه</th>
+                                    <th class="text-center">الرصيد المستحق</th>
+                                    <th class="text-center">الرصيد المعلق</th>
+                                    <th class="text-center">تفاصيل الرصيد</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for doctor_balance in doctor_balances %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a href="{% url 'dashboard_site:doctor_details_page' doctor_balance.pk %}">{{ doctor_balance.user__full_name }}</a>
+                                        </td>
+                                        <td class="text-center">{{ doctor_balance.doctor_wallet_balance }}</td>
+                                        <td class="text-center">{{ doctor_balance.completed_appointment_cost }}</td>
+                                        <td class="text-center">{{ doctor_balance.incoming_appointment_cost }}</td>
+                                        <td class="text-center">
+                                            <a href="{% url 'dashboard_site:doctor_balance_details_page' doctor_balance.pk %}">عرض
+                                                تقرير</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </form>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+
+            <nav aria-label="...">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if doctor_balances.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ doctor_balances.paginator.num_pages }}">Last</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ doctor_balances.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ doctor_balances.number }} of {{ doctor_balances.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    {% if doctor_balances.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ doctor_balances.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                               tabindex="-1">First</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block js_block %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $('#select-doctor').select2({
+            ajax: {
+                url: '/api/doctor/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    return query;
+                },
+                processResults: function (data) {
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name,
+                            data: r
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor-clear').click(() => {
+            $('#select-doctor').val(null).trigger('change');
+        });
+
+    </script>
+
+{% endblock %}

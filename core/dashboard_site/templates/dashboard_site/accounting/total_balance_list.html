@@ -1,0 +1,139 @@
+{% extends 'dashboard_site/base.html' %}
+{% load math %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">رصيد الأطباء</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">حسابات مالية</a></li>
+                    <li class="breadcrumb-item active">رصيد الأطباء</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="card card-table">
+
+                <div class="card-body">
+
+                    <div class="col-12">
+
+                        <h5 class="form-title"><span>تفاصيل الخزنة</span></h5>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover table-center mb-0 datatable">
+
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                    <th class="text-center">رصيد أطباء</th>
+                                    <th class="text-center">رصيد إسبيتاليا</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                        {{ incoming_completed_balance.total_cost|add_to:doctors_wallet_balance.total_balance|add_to:espitalia_wallet.balance }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ incoming_completed_balance.appointment_cost|add_to:doctors_wallet_balance.total_balance }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ incoming_completed_balance.espitalia_cost|add_to:espitalia_wallet.balance }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </form>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-12 mt-5">
+
+                        <h5 class="form-title"><span>تفاصيل المبالغ المستحقه</span></h5>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover table-center mb-0 datatable">
+
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                    <th class="text-center">رصيد أطباء</th>
+                                    <th class="text-center">رصيد إسبيتاليا</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-center">{{ completed_balance.total_cost|add_to:doctors_wallet_balance.total_balance|add_to:espitalia_wallet.balance }}</td>
+                                    <td class="text-center">{{ completed_balance.appointment_cost|add_to:doctors_wallet_balance.total_balance }}</td>
+                                    <td class="text-center">{{ completed_balance.espitalia_cost|add_to:espitalia_wallet.balance }}</td>
+                                </tr>
+                                </tbody>
+                            </form>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-12 mt-5">
+
+                        <h5 class="form-title"><span>تفاصيل المبالغ المعلقه</span></h5>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover table-center mb-0 datatable">
+
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">الرصيد الكلي<br>بالخـــزنة</th>
+                                    <th class="text-center">رصيد أطباء</th>
+                                    <th class="text-center">رصيد إسبيتاليا</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-center">{{ incoming_balance.total_cost }}</td>
+                                    <td class="text-center">{{ incoming_balance.appointment_cost }}</td>
+                                    <td class="text-center">{{ incoming_balance.espitalia_cost }}</td>
+                                </tr>
+                                </tbody>
+                            </form>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

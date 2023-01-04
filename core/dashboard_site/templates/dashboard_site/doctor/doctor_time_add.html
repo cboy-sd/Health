@@ -1,0 +1,120 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">إضافة خبره</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                    <li class="breadcrumb-item active">إضافة خبرات طبيب</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="{% url 'dashboard_site:doctor_time_add_page' doctor.pk %}"
+                          method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="{{ redirect_field_name }}"
+                               value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات المقابله</span></h5>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>يوم الاسبوع</label>
+                                    <select
+                                            name="days"
+                                            class="form-control {% if form.errors.days %} is-invalid {% endif %}"
+                                            required
+                                    >
+                                        <option selected disabled>إختيار اليوم</option>
+                                        <option value="السبت">يوم السبت</option>
+                                        <option value="الاحد">يوم الأحد</option>
+                                        <option value="الاثنين">يوم الإثنين</option>
+                                        <option value="الثلاثاء">يوم الثلاثاء</option>
+                                        <option value="الاربعاء">يوم الأربعاء</option>
+                                        <option value="الخميس">يوم الخميس</option>
+                                        <option value="الجمعه">يوم الجمعة</option>
+                                    </select>
+                                    {% for error in form.errors.days %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>بدأ المقابله</label>
+                                    <input
+                                            type="time"
+                                            name="start_hour"
+                                            class="form-control {% if form.errors.start_hour %} is-invalid {% endif %}"
+                                            value="{{ form.start_hour }}"
+                                    >
+                                    {% for error in form.errors.start_hour %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>إنتهاء المقابله</label>
+                                    <input
+                                            type="time"
+                                            name="end_hour"
+                                            class="form-control {% if form.errors.end_hour %} is-invalid {% endif %}"
+                                            value="{{ form.end_hour }}"
+                                    >
+                                    {% for error in form.errors.start_hour %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">تأكيد الإضافة</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

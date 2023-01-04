@@ -1,0 +1,353 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+{% block css_block %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">بيانات مريض</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a
+                            href="{% url 'dashboard_site:patient_list_page' %}">المرضى</a></li>
+                    <li class="breadcrumb-item active"> عرض بيانات مريض</li>
+                </ul>
+            </div>
+            {% if request.user.user_role != 'DOCTOR' %}
+                <div class="col-auto text-right float-right ml-auto">
+                    {#                        <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> تحميل</a>#}
+                    <a href="{% url "dashboard_site:patient_edit_page" patient.pk %}" class="btn btn-primary"><i
+                            class="fas fa-pen"></i></a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-8">
+                    <div class="about-info">
+                        <!-- <h4>About Me</h4> -->
+                        <div class="media mt-3">
+                            {% if patient.user.profile %}
+                                <img src="{{ patient.user.profile.url }}" class="mr-3" alt="...">
+                            {% else %}
+                                <img src="/static/assets/img/user.jpg" class="mr-3" alt="...">
+                            {% endif %}
+                            <div class="media-body">
+                                <ul>
+                                    <li>
+                                        <span class="title-span">إسم المريض : </span>
+                                        <span class="info-span"> {{ patient.user.full_name }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">العنوان : </span>
+                                        <span class="info-span">{{ patient.address }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">رقم الهاتف : </span>
+                                        <span class="info-span">{{ patient.user.phone_number }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">رقم  الهاتف آخر : </span>
+                                        <span class="info-span"> {{ patient.user.phone_number_2 }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span"> جنس : </span>
+                                        {% if patient.user.gender == "m" %}
+                                            <span class="info-span"> ذكر</span>
+                                        {% elif patient.user.gender == "f" %}
+                                            <span class="info-span"> أنثى </span>
+                                        {% else %}
+                                            <span class="info-span"> غير معرف </span>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mt-2">
+
+                <div class="col-sm-12 mb-3">
+                    <form method="GET">
+                        <div class="row">
+                            <div class="col-md-3 col-12 p-2">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button id="select-doctor-clear" class="btn btn-outline-secondary"
+                                                type="button">Clear
+                                        </button>
+                                    </div>
+                                    <select
+                                            id="select-doctor"
+                                            class="form-control"
+                                            name="doctor_id"
+                                            style="height: 40px"
+                                    >
+                                        <option selected disabled>بحث باسم الطبيب</option>
+                                        {% if request.GET.doctor_id %}
+                                            <option value="{{ request.GET.doctor_id }}"
+                                                    selected>{{ doctor_name }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3 col-12 p-2">
+                                <select name="status" class="custom-select">
+                                    <option value="ALL" {% if request.GET.status == 'ALL' %} selected {% endif %}>
+                                        كل المقابلات
+                                    </option>
+                                    <option value="INCOMING" {% if request.GET.status == 'INCOMING' %}
+                                            selected {% endif %}>
+                                        مقابله قادمه
+                                    </option>
+                                    <option value="COMPLETED" {% if request.GET.status == 'COMPLETED' %}
+                                            selected {% endif %}>
+                                        مقابله تمت بنجاح
+                                    </option>
+                                    <option value="CANCELLED_OTHER" {% if request.GET.status == 'CANCELLED_OTHER' %}
+                                            selected {% endif %}>
+                                        مقابله ملغيه لاسباب اخري
+                                    </option>
+                                    <option value="CANCELLED_PATIENT" {% if request.GET.status == 'CANCELLED_PATIENT' %}
+                                            selected {% endif %}>
+                                        مقابله ملغيه عدم حضور المريض
+                                    </option>
+                                    <option value="CANCELLED_DOCTOR" {% if request.GET.status == 'CANCELLED_DOCTOR' %}
+                                            selected {% endif %}>
+                                        مقابله ملغيه عدم حضور الطبيب
+                                    </option>
+                                    <option value="DELAYED_PATIENT" {% if request.GET.status == 'DELAYED_PATIENT' %}
+                                            selected {% endif %}>
+                                        مقابله مأجله عدم حضور المريض
+                                    </option>
+                                    <option value="DELAYED_DOCTOR" {% if request.GET.status == 'DELAYED_DOCTOR' %}
+                                            selected {% endif %}>
+                                        مقابله مأجله عدم حضور الطبيب
+                                    </option>
+                                    <option value="DELAYED_OTHER" {% if request.GET.status == 'DELAYED_OTHER' %}
+                                            selected {% endif %}>
+                                        مقابله مأجله لاسباب اخري
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 col-12 p-2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary" type="submit">
+                                        بحث
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="skill-info">
+                        <h4>سجل المتابعة</h4>
+
+                        <div class="card card-table">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-center mb-0 datatable">
+                                        <thead>
+                                        <tr>
+                                            <th>دكتور</th>
+                                            <th>تاريخ المتابعة</th>
+                                            <th>حالة المقابلة</th>
+                                            <th>زمن والبدأ</th>
+                                            <th>زمن الانتهاء</th>
+                                            <th> تعليق</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for appointment in appointments %}
+                                            <tr>
+                                                <td>{{ appointment.doctor.user.full_name }}</td>
+                                                <td>{{ appointment.start_date | date:'Y-m-d' }}</td>
+                                                <td>
+                                                    {% if appointment.is_done == True %}
+                                                        تم المقابلة
+                                                    {% else %}
+                                                        لم يتم
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ appointment.start_date | time:'H:i A' }}</td>
+                                                <td>{{ appointment.end_date | time:'H:i A' }}</td>
+                                                <td>{{ appointment.status_note }}</td>
+
+                                            </tr>
+
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="col-sm-12 text-center">
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                            {% if appointments.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ request.get_full_path | process_full_path }}page={{ appointments.paginator.num_pages }}">Last</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ request.get_full_path | process_full_path }}page={{ appointments.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+
+                            <li class="page-item active">
+                                <a class="page-link" href="#">
+                                    Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}
+                                </a>
+                            </li>
+
+                            {% if appointments.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ request.get_full_path | process_full_path }}page={{ appointments.previous_page_number }}"
+                                       tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                                       tabindex="-1">First</a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+
+            {% comment %}
+
+                <div class="row mt-2">
+
+                <h5>
+                    ملفات المريض
+
+                    <a href="{% url "dashboard_site:patient_file_add_page" patient.pk %}">
+
+                        <i class="fas fa-plus"></i>
+                    </a>
+
+                </h5>
+
+                <div class="col-md-12">
+                    <div class="skill-info">
+                        <!--                                <h4> ملفات المريض</h4>-->
+
+                        <div class="card card-table">
+                            <div class="card-body">
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover table-center mb-0 datatable">
+
+                                        <tbody>
+
+                                        {% for patient_file in patient_files %}
+                                            <tr>
+
+                                                <td>
+                                                    <a href="{{ patient_file.file.url }}">
+                                                        ملف مريض
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            {% endcomment %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $('#select-doctor').select2({
+            ajax: {
+                url: '/api/doctor/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    return query;
+                },
+                processResults: function (data) {
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name,
+                            data: r
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor-clear').click(() => {
+            $('#select-doctor').val(null).trigger('change');
+        });
+
+    </script>
+
+{% endblock %}

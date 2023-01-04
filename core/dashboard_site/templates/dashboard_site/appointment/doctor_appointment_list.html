@@ -1,0 +1,309 @@
+{% extends 'dashboard_site/base.html' %}
+{% load url_params %}
+
+
+{% block css_block %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">المقابلات</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">المقابلات</a></li>
+                    <li class="breadcrumb-item active">قائمة المقابلات</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12 mb-3">
+            <form method="GET">
+                <div class="row">
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button id="select-patient-clear" class="btn btn-outline-secondary" type="button">Clear
+                                </button>
+                            </div>
+                            <select
+                                    id="select-patient"
+                                    class="form-control"
+                                    name="patient_id"
+                            >
+                                <option selected disabled>بحث باسم المريض</option>
+                                {% if request.GET.patient_id %}
+                                    <option value="{{ request.GET.patient_id }}" selected>{{ patient_name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12 p-2">
+                        <select name="status" class="custom-select">
+                            <option value="ALL" {% if request.GET.status == 'ALL' %} selected {% endif %}>
+                                كل المقابلات
+                            </option>
+                            <option value="INCOMING" {% if request.GET.status == 'INCOMING' %} selected {% endif %}>
+                                مقابله قادمه
+                            </option>
+                            <option value="COMPLETED" {% if request.GET.status == 'COMPLETED' %} selected {% endif %}>
+                                مقابله تمت بنجاح
+                            </option>
+                            <option value="CANCELLED_OTHER" {% if request.GET.status == 'CANCELLED_OTHER' %}
+                                    selected {% endif %}>
+                                مقابله ملغيه لاسباب اخري
+                            </option>
+                            <option value="CANCELLED_PATIENT" {% if request.GET.status == 'CANCELLED_PATIENT' %}
+                                    selected {% endif %}>
+                                مقابله ملغيه عدم حضور المريض
+                            </option>
+                            <option value="CANCELLED_DOCTOR" {% if request.GET.status == 'CANCELLED_DOCTOR' %}
+                                    selected {% endif %}>
+                                مقابله ملغيه عدم حضور الطبيب
+                            </option>
+                            <option value="DELAYED_PATIENT" {% if request.GET.status == 'DELAYED_PATIENT' %}
+                                    selected {% endif %}>
+                                مقابله مأجله عدم حضور المريض
+                            </option>
+                            <option value="DELAYED_DOCTOR" {% if request.GET.status == 'DELAYED_DOCTOR' %}
+                                    selected {% endif %}>
+                                مقابله مأجله عدم حضور الطبيب
+                            </option>
+                            <option value="DELAYED_OTHER" {% if request.GET.status == 'DELAYED_OTHER' %}
+                                    selected {% endif %}>
+                                مقابله مأجله لاسباب اخري
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-12 p-2">
+                        <div class="input-group mb-3">
+                            <input
+                                    type="date"
+                                    id="day_filter"
+                                    name="day_filter"
+                                    {% if request.GET.day_filter %}
+                                    value="{{ request.GET.day_filter }}"
+                                    {% endif %}
+                                    class="custom-select"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-12 p-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                بحث
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <form>
+                                <thead>
+                                <tr>
+                                    <th>اسم المريض</th>
+                                    <th>التاريخ</th>
+                                    <th>بداية المقابلة</th>
+                                    <th>نهاية المقابلة</th>
+                                    <th>حالة المقابلة</th>
+                                    <th class="text-center">إدارة</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for appointment in appointments %}
+                                    <tr>
+
+                                        <td>
+                                            <a href="{% url 'dashboard_site:patient_details_page' appointment.patient.pk %}">
+                                                {{ appointment.patient.user.full_name }}
+                                            </a>
+                                        </td>
+
+                                        <td>{{ appointment.start_date | date:"d-m-Y" }}</td>
+                                        <td>{{ appointment.start_date | date:"h:i A" }}</td>
+                                        <td>{{ appointment.end_date | date:"h:i A" }}</td>
+
+                                        <td>
+                                            {% if appointment.appointment_status == 'INCOMING' %}
+                                                في الانتظار
+                                            {% elif appointment.appointment_status == 'COMPLETED' %}
+                                                مقابله تمت بنجاح
+                                            {% elif appointment.appointment_status == 'CANCELLED_OTHER' %}
+                                                مقابله ملغيه لاسباب اخري
+                                            {% elif appointment.appointment_status == 'CANCELLED_PATIENT' %}
+                                                مقابله ملغيه عدم حضور المريض
+                                            {% elif appointment.appointment_status == 'CANCELLED_DOCTOR' %}
+                                                مقابله ملغيه عدم حضور الطبيب
+                                            {% elif appointment.appointment_status == 'DELAYED_PATIENT' %}
+                                                مقابله مأجله عدم حضور المريض
+                                            {% elif appointment.appointment_status == 'DELAYED_DOCTOR' %}
+                                                مقابله مأجله عدم حضور الطبيب
+                                            {% elif appointment.appointment_status == 'DELAYED_OTHER' %}
+                                                مقابله مأجله لاسباب اخري
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <div class="actions">
+                                                <a href="{% url 'dashboard_site:appointment_status_change_page' appointment.pk %}"
+                                                   class="btn btn-sm bg-success-light mr-2"> تغيير حالة
+                                                    المقابله </a>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </form>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+
+            <nav aria-label="...">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if appointments.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.paginator.num_pages }}">Last</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    {% if appointments.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ request.get_full_path | process_full_path }}page={{ appointments.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ request.get_full_path | process_full_path }}page=1"
+                               tabindex="-1">First</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $('#select-doctor').select2({
+            ajax: {
+                url: '/api/doctor/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    return query;
+                },
+                processResults: function (data) {
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name,
+                            data: r
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-doctor-clear').click(() => {
+            $('#select-doctor').val(null).trigger('change');
+        });
+
+
+        $('#select-patient').select2({
+            ajax: {
+                url: '/api/patient/list/',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term
+                    }
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    let results = _.map(data.results, (r) => {
+                        return {
+                            id: `${r.pk}::${r.user.full_name}`,
+                            text: r.user.full_name
+                        }
+                    })
+                    return {
+                        results: results
+                    };
+                },
+            }
+        });
+
+        $('#select-patient-clear').click(() => {
+            $('#select-patient').val(null).trigger('change');
+        });
+
+    </script>
+
+{% endblock %}

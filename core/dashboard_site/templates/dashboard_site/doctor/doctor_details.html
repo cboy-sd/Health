@@ -1,0 +1,228 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">بيانات طبيب</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                    <li class="breadcrumb-item active">عرض بيانات طبيب</li>
+                </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="#" class="btn btn-primary">
+                    <i class="fas fa-pen"></i></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-info">
+                        <!-- <h4>About Me</h4> -->
+                        <div class="media mt-3">
+                            {% if doctor.user.profile %}
+                                <img src="{{ doctor.user.profile.url }}" class="mr-3" alt="...">
+                            {% else %}
+                                <img src="/static/assets/img/user.jpg" class="mr-3" alt="...">
+                            {% endif %}
+                            <div class="media-body">
+                                <ul>
+                                    <li>
+                                        <span class="title-span">الإسم : </span>
+                                        <span class="info-span">
+                                                    {{ doctor.user.full_name }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">التخصص : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.specialization }}
+                                               </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">رقم الهاتف : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.user.phone_number }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">رقم الهاتف 2 : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.user.phone_number_2 }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">سعر العيادة : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.appointment_cost }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">سعر اسبتاليا : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.espitalia_cost }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">الحساب البنكي : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.bank_account_type }} - {{ doctor.bank_account }}
+                                                </span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">البريد الإلكتروني : </span>
+                                        <span class="info-span">
+                                                   {{ doctor.user.email }}
+                                                </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <!-- <div class="col-md-12">
+                               <p>Hello I am Daisy Parks. Lorem Ipsum is simply dummy text of the printing and typesetting industry, simply dummy text of the printing and typesetting industry.</p>
+                            </div> -->
+                        </div>
+                        <div class="row follow-sec">
+                            <div class="col-md-4 mb-3">
+                                <div class="blue-box">
+                                    <h3>{{ total_completed_appointments }}</h3>
+                                    <p>المقابلات</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="blue-box">
+                                    <h3>{{ total_appointments }}</h3>
+                                    <p>الحجوزات</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="blue-box">
+                                    <h3>{{ total_failed_appointments }}</h3>
+                                    <p>فشل</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2" id="experience-tag">
+                            <div class="col-md-12">
+
+                                <h5>
+                                    الخبرات
+
+                                    <a
+                                            href="{% url 'dashboard_site:doctor_experience_add_page' doctor.pk %}"
+                                            class="btn btn-primary"
+                                    >
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+
+                                </h5>
+
+                                {% for doctor_experience in doctor_experiences %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="flex justify-content-center">
+                                                {{ doctor_experience.experience }}
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <div class="actions">
+                                                <a
+                                                        href="{% url "dashboard_site:doctor_experience_edit_page" doctor.pk doctor_experience.pk %}"
+                                                        class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <a href="{% url "dashboard_site:doctor_experience_delete_page" doctor.pk doctor_experience.pk %}"
+                                                   class="btn btn-sm bg-danger text-white">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-2" id="doctor-time-tag">
+                            <div class="col-md-12">
+                                <h5>
+                                    مواعيد العمل
+
+                                    <a
+                                            href="{% url 'dashboard_site:doctor_time_add_page' doctor.pk %}"
+                                            class="btn btn-primary"><i class="fas fa-plus"></i></a>
+
+                                </h5>
+                                {% for doctor_time in doctor_times %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>
+                                                {{ doctor_time.days }}
+                                                |
+                                                {{ doctor_time.start_hour | time:"g:i A" }}
+                                                حتي
+                                                {{ doctor_time.end_hour | time:"g:i A" }}
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <div class="actions">
+                                                <a href="{% url "dashboard_site:doctor_time_edit_page" doctor.pk doctor_time.pk %}"
+                                                   class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <a
+                                                        href="{% url "dashboard_site:doctor_time_delete_page" doctor.pk doctor_time.pk %}"
+                                                        class="btn btn-sm bg-danger text-white">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div class="skill-info">
+                        <h4>إعدادات الحساب</h4>
+                        <form>
+                            <div class="row mt-3">
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>إسم المستخدم</label>
+                                        <input type="text" value="{{ doctor.user.email }}" class="form-control"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>كلمة المرور</label>
+                                        <input type="password" value="****************" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}

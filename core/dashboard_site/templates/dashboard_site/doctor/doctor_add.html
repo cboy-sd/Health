@@ -1,0 +1,224 @@
+{% extends 'dashboard_site/base.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">إضافة طبيب جديد</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                    <li class="breadcrumb-item active">إضافة طبيب</li>
+                </ul>
+            </div>
+            Doctor Add
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                    رجوع
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="{% url "dashboard_site:doctor_add_page" %}" method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden"
+                               name="{{ redirect_field_name }}"
+                               value="{{ redirect_field_value }}"/>
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الطبيب</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>إسم الطبيب</label>
+                                    <input
+                                            type="text"
+                                            name="full_name"
+                                            class="form-control {% if user_form.errors.full_name %} is-invalid {% endif %}"
+                                            value="{{ user_form.full_name.value }}"
+                                            required
+                                    >
+                                    {% for error in user_form.errors.full_name %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>الجنس</label>
+                                    <select
+                                            class="form-control"
+                                            name="gender"
+                                            required
+                                    >
+                                        <option value="u" selected>غير معرف</option>
+                                        <option value="m" {% if user_form.gender.value == 'm' %} selected {% endif %}>
+                                            ذكر
+                                        </option>
+                                        <option value="f" {% if user_form.gender.value == 'f' %} selected {% endif %}>
+                                            انثى
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>اسم العياده</label>
+                                    <input
+                                            type="text"
+                                            name="hospital"
+                                            class="form-control"
+                                            value="{{ doctor_form.hospital.value }}"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>تخصص الطبيب</label>
+                                    <input type="text" name="specialization"
+                                           value="{{ doctor_form.specialization.value }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>صورة الطبيب</label>
+                                    <input type="file" name="profile" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف</label>
+                                    <input type="number" name="phone_number_1"
+                                           value="{{ user_form.phone_number.value }}"
+                                           class="form-control {% if user_form.errors.phone_number %} is-invalid {% endif %}"
+                                           required>
+                                    {% for error in user_form.errors.phone_number %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الهاتف آخر</label>
+                                    <input type="number" name="phone_number_2"
+                                           value="{{ user_form.phone_number_2.value }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات التسعير</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>سعر العيادة</label>
+                                    <input type="number" name="appointment_cost"
+                                           value="{{ doctor_form.appointment_cost.value }}"
+                                           class="form-control {% if doctor_form.errors.appointment_cost %} is-invalid {% endif %}"
+                                           required>
+                                    {% for error in doctor_form.errors.appointment_cost %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>سعر إسبيتاليا</label>
+                                    <input type="number" name="espitalia_cost"
+                                           value="{{ doctor_form.espitalia_cost.value }}"
+                                           class="form-control {% if doctor_form.errors.espitalia_cost %} is-invalid {% endif %}"
+                                           required>
+                                    {% for error in doctor_form.errors.espitalia_cost %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>استلام الدفعيات</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>نوع الحساب البنكي</label>
+                                    <input type="text" name="bank_account_type"
+                                           value="{{ doctor_form.bank_account_type.value }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>رقم الحساب البنكي</label>
+                                    <input type="text" name="bank_account"
+                                           value="{{ doctor_form.bank_account.value }}" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <h5 class="form-title"><span>معلومات الحساب</span></h5>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني / إسم مستخدم</label>
+                                    <input type="text" name="username"
+                                           class="form-control {% if user_form.errors.email %} is-invalid {% endif %}"
+                                           value="{{ user_form.email.value }}"
+                                           required>
+                                    {% for error in user_form.errors.email %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>كلمة المرور</label>
+                                    <input type="password" name="password"
+                                           class="form-control {% if user_form.errors.password %} is-invalid {% endif %}"
+                                           required>
+                                    {% for error in user_form.errors.password %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">تأكيد الإضافة</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

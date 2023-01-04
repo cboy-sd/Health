@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>الإسبيتاليا - تغيير حالة المقابله</title>
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap-rtl.css">
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+
+<body>
+<div class="main-wrapper">
+
+    {% include 'dashboard_site/navbar.html' %}
+
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">حالة المقابله</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                            <li class="breadcrumb-item active">تغيير حالة المقابله</li>
+                        </ul>
+                    </div>
+                    <div class="col-auto text-right float-right ml-auto">
+                        <a href="" onclick="window.history.go(-1); return false;" class="btn btn-outline-primary mr-2">
+                            رجوع
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-sm-12">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form
+                                    action="{% url 'dashboard_site:appointment_status_change_page' appointment.pk %}"
+                                    method="POST"
+                            >
+
+                                {% csrf_token %}
+
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}"/>
+
+                                <div class="row">
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>معلومات المقابله</span></h5>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label>المريض</label>
+                                            <input type="text" value="{{ appointment.patient.user.full_name }}"
+                                                   class="form-control" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label>الطبيب</label>
+                                            <input type="text" value="{{ appointment.doctor.user.full_name }}"
+                                                   class="form-control" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label>تاريخ المقابله</label>
+                                            <input type="text" value="{{ appointment.start_date | date:"d-m-Y" }}"
+                                                   class="form-control"
+                                                   disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label>زمن البداية</label>
+                                            <input type="text" value="{{ appointment.start_date | date:"h:i A" }}"
+                                                   class="form-control"
+                                                   disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label>زمن النهايه</label>
+                                            <input type="text" value="{{ appointment.end_date | date:"h:i A" }}"
+                                                   class="form-control"
+                                                   disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="form-title"><span>حالة المقابله</span></h5>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label>حالة المقابله</label>
+                                            <select
+                                                    id="appointment-type"
+                                                    class="form-control"
+                                                    name="appointment_status"
+                                                    required
+                                            >
+                                                <option value="COMPLETED"
+                                                        {% if appointment.appointment_status == 'COMPLETED' %}selected{% endif %}>
+                                                    مقابله تمت بنجاح
+                                                </option>
+                                                <option value="CANCELLED_OTHER"
+                                                        {% if appointment.appointment_status == 'CANCELLED_OTHER' %}selected{% endif %}>
+                                                    مقابله ملغيه لاسباب اخري
+                                                </option>
+                                                <option value="CANCELLED_PATIENT"
+                                                        {% if appointment.appointment_status == 'CANCELLED_PATIENT' %}selected{% endif %}>
+                                                    مقابله ملغيه عدم حضور المريض
+                                                </option>
+                                                <option value="CANCELLED_DOCTOR"
+                                                        {% if appointment.appointment_status == 'CANCELLED_DOCTOR' %}selected{% endif %}>
+                                                    مقابله ملغيه عدم حضور الطبيب
+                                                </option>
+                                                <option value="DELAYED_OTHER"
+                                                        {% if appointment.appointment_status == 'DELAYED_OTHER' %}selected{% endif %}>
+                                                    مقابله مأجله لاسباب اخري
+                                                </option>
+                                                <option value="DELAYED_PATIENT"
+                                                        {% if appointment.appointment_status == 'DELAYED_PATIENT' %}selected{% endif %}>
+                                                    مقابله مأجله عدم حضور المريض
+                                                </option>
+                                                <option value="DELAYED_DOCTOR"
+                                                        {% if appointment.appointment_status == 'DELAYED_DOCTOR' %}selected{% endif %}>
+                                                    مقابله مأجله عدم حضور الطبيب
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label>تعليق الحاله</label>
+                                            <textarea type="text" name="status_note" class="form-control"
+                                                      required>{{ appointment.status_note }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">تغيير الحاله</button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <footer>
+            <p>الحقوق محفوظة © 2022 لدي عيادات الإسبيتاليا.</p>
+            <p>تم التنفيذ بواسطة <a href="https://alhasif.com"> <img class="avatar-img rounded-circle"
+                                                                     src="/static/assets/img/alhasif_logo.png"
+                                                                     alt="alhasif" width="50"> شركة الحصيف العالمية
+                المحدودة</a></p>
+        </footer>
+    </div>
+
+
+</div>
+<script src="/static/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/static/assets/js/popper.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="/static/assets/plugins/apexchart/chart-data.js"></script>
+<script src="/static/assets/js/script.js"></script>
+</body>
+
+</html>

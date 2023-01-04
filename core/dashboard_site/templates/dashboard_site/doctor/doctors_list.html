@@ -1,0 +1,141 @@
+{% extends 'dashboard_site/base.html' %}
+
+
+{% block content %}
+
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">قائمة الأطباء</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="">الأطباء</a></li>
+                <li class="breadcrumb-item active">قائمة الأطباء</li>
+            </ul>
+        </div>
+        <div class="col-auto text-right float-right ml-auto">
+            <a href="#"
+               class="btn btn-primary">
+                اضافة طبيب
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <form method="GET">
+            <div class="input-group mb-3">
+                <input
+                        type="text"
+                        class="form-control"
+                        name="search"
+                        value="{{ request.GET.search }}"
+                        placeholder="بحث باسم الطبيب, رقم الهاتف, الايميل"
+                >
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit">
+                        بحث
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card card-table">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0 datatable">
+                        <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>التخصص</th>
+                            <th>العيادة</th>
+                            <th>رقم الهاتف</th>
+                            <th>الحساب البنكي</th>
+                            <th>تكلفة العياده</th>
+                            <th>تكلفة اسبتاليا</th>
+                            <th class="text-right">خيارات إدارة</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for doctor in doctors %}
+
+                        <tr>
+                            <td>
+                                <a href="#"> {{doctor.user.full_name}}</a>
+                                <h2 class="table-avatar">
+                                    {% if doctor.user.profile %}
+                                    <img
+                                            class="avatar-img rounded-circle"
+                                            src="{{ doctor.user.profile.url }}"
+                                            alt="User Image"> </a>
+                                    {% else %}
+                                    <a class="avatar avatar-sm mr-2"><img
+                                            class="avatar-img rounded-circle"
+                                            src="/static/assets/img/profiles/avatar-03.jpg"
+                                            alt="User Image"></a>
+                                    {% endif %}
+                                </h2>
+                            </td>
+                            <td>{{ doctor.specialization }}</td>
+                            <td>{{ doctor.hospital }}</td>
+                            <td>{{ doctor.user.phone_number }}</td>
+                            <td>{{ doctor.bank_account_type }} - {{ doctor.bank_account }}</td>
+                            <td>{{ doctor.appointment_cost }}</td>
+                            <td>{{ doctor.espitalia_cost }}</td>
+                            <td class="text-right">
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 text-center">
+        <nav aria-label="...">
+            <ul class="pagination justify-content-center">
+                {% if doctors.has_next %}
+                <li class="page-item">
+
+                </li>
+                <li class="page-item">
+
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link" href="#">
+                        Page {{ doctors.number }} of {{ doctors.paginator.num_pages }}
+                    </a>
+                </li>
+
+                {% if doctors.has_previous %}
+                <li class="page-item">
+                    tabindex="-1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       tabindex="-1">Previous</a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+{% endblock %}
