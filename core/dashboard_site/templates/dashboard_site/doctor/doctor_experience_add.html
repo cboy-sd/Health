@@ -26,15 +26,13 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form action="{% url "dashboard_site:doctor_experience_add_page" doctor.pk %}"
+                    <form action="{% url 'dashboard_site:doctor_add_experience' doctor_id %}"
                           method="POST"
                           enctype="multipart/form-data">
 
                         {% csrf_token %}
 
-                        <input type="hidden"
-                               name="{{ redirect_field_name }}"
-                               value="{{ redirect_field_value }}"/>
+
 
                         <div class="row">
                             <div class="col-12">
@@ -43,6 +41,7 @@
                             <div class="col-12 col-sm-12">
                                 <div class="form-group">
                                     <label>الخبره</label>
+                                    <input type="hidden" name="doctor_id" value="{{doctor_id}}">
                                     <textarea
                                             name="experience"
                                             class="form-control {% if form.errors.experience %} is-invalid {% endif %}"

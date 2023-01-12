@@ -26,11 +26,11 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form
-                            action="{% url "dashboard_site:doctor_edit_page" doctor.pk %}"
+
+                           <form  action="{% url 'dashboard_site:edit_doctor_page' doctor.pk %}"
                             method="POST"
-                            enctype="multipart/form-data"
-                    >
+                            enctype="multipart/form-data" >
+
 
                         {% csrf_token %}
 

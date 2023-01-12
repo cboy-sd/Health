@@ -67,7 +67,7 @@
 
                         <tr>
                             <td>
-                                <a href="#"> {{doctor.user.full_name}}</a>
+                                <a href="{% url 'dashboard_site:doctor_details' doctor.pk %}"> {{doctor.user.full_name}}</a>
                                 <h2 class="table-avatar">
                                     {% if doctor.user.profile %}
                                     <img

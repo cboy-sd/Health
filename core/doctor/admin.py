@@ -22,6 +22,7 @@ class DoctorExperienceInline(admin.StackedInline):
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'full_name',
         'phone_number',
         'hospital',
@@ -39,6 +40,7 @@ class DoctorAdmin(admin.ModelAdmin):
 @admin.register(DoctorTime)
 class DoctorTimeAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'doctor',
         'days',
         'day_order',
@@ -60,6 +62,7 @@ class DoctorTimeAdmin(admin.ModelAdmin):
 @admin.register(DoctorExperience)
 class DoctorExperienceAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'doctor',
         'experience',
     ]

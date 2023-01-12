@@ -35,7 +35,7 @@ class Doctor(models.Model):
     bank_account_type = models.CharField(max_length=100, blank=True)
     bank_account = models.CharField(max_length=100, blank=True)
     appointment_cost = models.FloatField()
-    espitalia_cost = models.FloatField()
+    healthcare_cost = models.FloatField()
     is_active = models.BooleanField(default=True)
     # timestamp
     created = models.DateTimeField(auto_now_add=True)
